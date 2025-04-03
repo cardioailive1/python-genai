@@ -1554,6 +1554,12 @@ class SpeechConfig(_common.BaseModel):
       description="""The configuration for the speaker to use.
       """,
   )
+  language_code: Optional[str] = Field(
+      default=None,
+      description="""Language code (ISO 639. e.g. en-US) for the speech synthesization.
+      Only available for Live API.
+      """,
+  )
 
 
 class SpeechConfigDict(TypedDict, total=False):
@@ -1561,6 +1567,11 @@ class SpeechConfigDict(TypedDict, total=False):
 
   voice_config: Optional[VoiceConfigDict]
   """The configuration for the speaker to use.
+      """
+
+  language_code: Optional[str]
+  """Language code (ISO 639. e.g. en-US) for the speech synthesization.
+      Only available for Live API.
       """
 
 
@@ -9427,7 +9438,7 @@ class LiveClientSetup(_common.BaseModel):
       Note: only a subset of fields are supported.
       """,
   )
-  system_instruction: Optional[Content] = Field(
+  system_instruction: Optional[ContentUnion] = Field(
       default=None,
       description="""The user provided system instructions for the model.
       Note: only text should be used in parts and content in each part will be
@@ -9469,7 +9480,7 @@ class LiveClientSetupDict(TypedDict, total=False):
       Note: only a subset of fields are supported.
       """
 
-  system_instruction: Optional[ContentDict]
+  system_instruction: Optional[ContentUnionDict]
   """The user provided system instructions for the model.
       Note: only text should be used in parts and content in each part will be
       in a separate paragraph."""
@@ -9794,7 +9805,7 @@ class LiveConnectConfig(_common.BaseModel):
       description="""The speech generation configuration.
       """,
   )
-  system_instruction: Optional[Content] = Field(
+  system_instruction: Optional[ContentUnion] = Field(
       default=None,
       description="""The user provided system instructions for the model.
       Note: only text should be used in parts and content in each part will be
@@ -9824,6 +9835,10 @@ If included the server will send SessionResumptionUpdate messages.""",
       description="""The transcription of the output aligns with the language code
       specified for the output audio.
       """,
+  )
+  realtime_input_config: Optional[RealtimeInputConfig] = Field(
+      default=None,
+      description="""Configures the realtime input behavior in BidiGenerateContent.""",
   )
   context_window_compression: Optional[ContextWindowCompressionConfig] = Field(
       default=None,
@@ -9883,7 +9898,7 @@ class LiveConnectConfigDict(TypedDict, total=False):
   """The speech generation configuration.
       """
 
-  system_instruction: Optional[ContentDict]
+  system_instruction: Optional[ContentUnionDict]
   """The user provided system instructions for the model.
       Note: only text should be used in parts and content in each part will be
       in a separate paragraph."""
@@ -9908,6 +9923,9 @@ If included the server will send SessionResumptionUpdate messages."""
   """The transcription of the output aligns with the language code
       specified for the output audio.
       """
+
+  realtime_input_config: Optional[RealtimeInputConfigDict]
+  """Configures the realtime input behavior in BidiGenerateContent."""
 
   context_window_compression: Optional[ContextWindowCompressionConfigDict]
   """Configures context window compression mechanism.
